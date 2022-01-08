@@ -9,25 +9,29 @@ part of 'moor_database.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Task extends DataClass implements Insertable<Task> {
   final int id;
-  final String title;
-  final String content;
-  final int category;
+  final String tagName;
+  final String name;
+  final DateTime dueDate;
+  final bool completed;
   Task(
       {@required this.id,
-      @required this.title,
-      @required this.content,
-      this.category});
+      this.tagName,
+      @required this.name,
+      this.dueDate,
+      @required this.completed});
   factory Task.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     return Task(
       id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      title: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}title']),
-      content: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}body']),
-      category: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      tagName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}tag_name']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      dueDate: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}due_date']),
+      completed: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}completed']),
     );
   }
   @override
@@ -36,14 +40,17 @@ class Task extends DataClass implements Insertable<Task> {
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
     }
-    if (!nullToAbsent || title != null) {
-      map['title'] = Variable<String>(title);
+    if (!nullToAbsent || tagName != null) {
+      map['tag_name'] = Variable<String>(tagName);
     }
-    if (!nullToAbsent || content != null) {
-      map['body'] = Variable<String>(content);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
     }
-    if (!nullToAbsent || category != null) {
-      map['category'] = Variable<int>(category);
+    if (!nullToAbsent || dueDate != null) {
+      map['due_date'] = Variable<DateTime>(dueDate);
+    }
+    if (!nullToAbsent || completed != null) {
+      map['completed'] = Variable<bool>(completed);
     }
     return map;
   }
@@ -51,14 +58,16 @@ class Task extends DataClass implements Insertable<Task> {
   TasksCompanion toCompanion(bool nullToAbsent) {
     return TasksCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
-      content: content == null && nullToAbsent
+      tagName: tagName == null && nullToAbsent
           ? const Value.absent()
-          : Value(content),
-      category: category == null && nullToAbsent
+          : Value(tagName),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      dueDate: dueDate == null && nullToAbsent
           ? const Value.absent()
-          : Value(category),
+          : Value(dueDate),
+      completed: completed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completed),
     );
   }
 
@@ -67,9 +76,10 @@ class Task extends DataClass implements Insertable<Task> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Task(
       id: serializer.fromJson<int>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      content: serializer.fromJson<String>(json['content']),
-      category: serializer.fromJson<int>(json['category']),
+      tagName: serializer.fromJson<String>(json['tagName']),
+      name: serializer.fromJson<String>(json['name']),
+      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      completed: serializer.fromJson<bool>(json['completed']),
     );
   }
   @override
@@ -77,83 +87,99 @@ class Task extends DataClass implements Insertable<Task> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'title': serializer.toJson<String>(title),
-      'content': serializer.toJson<String>(content),
-      'category': serializer.toJson<int>(category),
+      'tagName': serializer.toJson<String>(tagName),
+      'name': serializer.toJson<String>(name),
+      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'completed': serializer.toJson<bool>(completed),
     };
   }
 
-  Task copyWith({int id, String title, String content, int category}) => Task(
+  Task copyWith(
+          {int id,
+          String tagName,
+          String name,
+          DateTime dueDate,
+          bool completed}) =>
+      Task(
         id: id ?? this.id,
-        title: title ?? this.title,
-        content: content ?? this.content,
-        category: category ?? this.category,
+        tagName: tagName ?? this.tagName,
+        name: name ?? this.name,
+        dueDate: dueDate ?? this.dueDate,
+        completed: completed ?? this.completed,
       );
   @override
   String toString() {
     return (StringBuffer('Task(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('content: $content, ')
-          ..write('category: $category')
+          ..write('tagName: $tagName, ')
+          ..write('name: $name, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('completed: $completed')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, content, category);
+  int get hashCode => Object.hash(id, tagName, name, dueDate, completed);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Task &&
           other.id == this.id &&
-          other.title == this.title &&
-          other.content == this.content &&
-          other.category == this.category);
+          other.tagName == this.tagName &&
+          other.name == this.name &&
+          other.dueDate == this.dueDate &&
+          other.completed == this.completed);
 }
 
 class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
-  final Value<String> title;
-  final Value<String> content;
-  final Value<int> category;
+  final Value<String> tagName;
+  final Value<String> name;
+  final Value<DateTime> dueDate;
+  final Value<bool> completed;
   const TasksCompanion({
     this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.content = const Value.absent(),
-    this.category = const Value.absent(),
+    this.tagName = const Value.absent(),
+    this.name = const Value.absent(),
+    this.dueDate = const Value.absent(),
+    this.completed = const Value.absent(),
   });
   TasksCompanion.insert({
     this.id = const Value.absent(),
-    @required String title,
-    @required String content,
-    this.category = const Value.absent(),
-  })  : title = Value(title),
-        content = Value(content);
+    this.tagName = const Value.absent(),
+    @required String name,
+    this.dueDate = const Value.absent(),
+    this.completed = const Value.absent(),
+  }) : name = Value(name);
   static Insertable<Task> custom({
     Expression<int> id,
-    Expression<String> title,
-    Expression<String> content,
-    Expression<int> category,
+    Expression<String> tagName,
+    Expression<String> name,
+    Expression<DateTime> dueDate,
+    Expression<bool> completed,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (content != null) 'body': content,
-      if (category != null) 'category': category,
+      if (tagName != null) 'tag_name': tagName,
+      if (name != null) 'name': name,
+      if (dueDate != null) 'due_date': dueDate,
+      if (completed != null) 'completed': completed,
     });
   }
 
   TasksCompanion copyWith(
       {Value<int> id,
-      Value<String> title,
-      Value<String> content,
-      Value<int> category}) {
+      Value<String> tagName,
+      Value<String> name,
+      Value<DateTime> dueDate,
+      Value<bool> completed}) {
     return TasksCompanion(
       id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      category: category ?? this.category,
+      tagName: tagName ?? this.tagName,
+      name: name ?? this.name,
+      dueDate: dueDate ?? this.dueDate,
+      completed: completed ?? this.completed,
     );
   }
 
@@ -163,14 +189,17 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (tagName.present) {
+      map['tag_name'] = Variable<String>(tagName.value);
     }
-    if (content.present) {
-      map['body'] = Variable<String>(content.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
-    if (category.present) {
-      map['category'] = Variable<int>(category.value);
+    if (dueDate.present) {
+      map['due_date'] = Variable<DateTime>(dueDate.value);
+    }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
     }
     return map;
   }
@@ -179,9 +208,10 @@ class TasksCompanion extends UpdateCompanion<Task> {
   String toString() {
     return (StringBuffer('TasksCompanion(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('content: $content, ')
-          ..write('category: $category')
+          ..write('tagName: $tagName, ')
+          ..write('name: $name, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('completed: $completed')
           ..write(')'))
         .toString();
   }
@@ -200,29 +230,40 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
           type: const IntType(),
           requiredDuringInsert: false,
           defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  GeneratedColumn<String> _title;
+  final VerificationMeta _tagNameMeta = const VerificationMeta('tagName');
+  GeneratedColumn<String> _tagName;
   @override
-  GeneratedColumn<String> get title => _title ??= GeneratedColumn<String>(
-      'title', aliasedName, false,
+  GeneratedColumn<String> get tagName =>
+      _tagName ??= GeneratedColumn<String>('tag_name', aliasedName, true,
+          type: const StringType(),
+          requiredDuringInsert: false,
+          $customConstraints: 'NULL REFERENCES tags(name)');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedColumn<String> _name;
+  @override
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 25),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 50),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _contentMeta = const VerificationMeta('content');
-  GeneratedColumn<String> _content;
+  final VerificationMeta _dueDateMeta = const VerificationMeta('dueDate');
+  GeneratedColumn<DateTime> _dueDate;
   @override
-  GeneratedColumn<String> get content =>
-      _content ??= GeneratedColumn<String>('body', aliasedName, false,
-          type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  GeneratedColumn<int> _category;
-  @override
-  GeneratedColumn<int> get category =>
-      _category ??= GeneratedColumn<int>('category', aliasedName, true,
+  GeneratedColumn<DateTime> get dueDate =>
+      _dueDate ??= GeneratedColumn<DateTime>('due_date', aliasedName, true,
           type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _completedMeta = const VerificationMeta('completed');
+  GeneratedColumn<bool> _completed;
   @override
-  List<GeneratedColumn> get $columns => [id, title, content, category];
+  GeneratedColumn<bool> get completed =>
+      _completed ??= GeneratedColumn<bool>('completed', aliasedName, false,
+          type: const BoolType(),
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (completed IN (0, 1))',
+          defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [id, tagName, name, dueDate, completed];
   @override
   String get aliasedName => _alias ?? 'tasks';
   @override
@@ -235,21 +276,23 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (data.containsKey('title')) {
+    if (data.containsKey('tag_name')) {
+      context.handle(_tagNameMeta,
+          tagName.isAcceptableOrUnknown(data['tag_name'], _tagNameMeta));
+    }
+    if (data.containsKey('name')) {
       context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
-      context.missing(_titleMeta);
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('body')) {
-      context.handle(_contentMeta,
-          content.isAcceptableOrUnknown(data['body'], _contentMeta));
-    } else if (isInserting) {
-      context.missing(_contentMeta);
+    if (data.containsKey('due_date')) {
+      context.handle(_dueDateMeta,
+          dueDate.isAcceptableOrUnknown(data['due_date'], _dueDateMeta));
     }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
+    if (data.containsKey('completed')) {
+      context.handle(_completedMeta,
+          completed.isAcceptableOrUnknown(data['completed'], _completedMeta));
     }
     return context;
   }
@@ -286,7 +329,7 @@ abstract class _$MyDatabase extends GeneratedDatabase {
 
 mixin _$TaskDaoMixin on DatabaseAccessor<MyDatabase> {
   $TasksTable get tasks => attachedDatabase.tasks;
-  Selectable<Task> watchCategoryOneTasks() {
+  Selectable<Task> getCategoryOneTasks() {
     return customSelect(
         'SELECT * FROM Tasks WHERE category = 1 ORDER BY title ASC;',
         variables: [],

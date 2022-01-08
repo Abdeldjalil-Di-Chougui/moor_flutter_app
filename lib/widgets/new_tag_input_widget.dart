@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:moor/moor.dart';
+import 'package:moor_flutter_app/moor_database.dart';
 import 'package:provider/provider.dart';
 
 class NewTagInput extends StatefulWidget {
@@ -51,25 +51,6 @@ class _NewTagInputState extends State<NewTagInput> {
           );
           dao.insertTag(tag);
           resetValuesAfterSubmit();
-        },
-      ),
-    );
-  }
-
-  Widget _buildColorPickerButton(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: GestureDetector(
-        child: Container(
-          width: 25,
-          height: 25,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: pickedTagColor,
-          ),
-        ),
-        onTap: () {
-          _showColorPickerDialog(context);
         },
       ),
     );

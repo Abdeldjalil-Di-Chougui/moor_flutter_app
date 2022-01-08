@@ -13,5 +13,7 @@ class Todo extends Table {
 class MyDatabase extends _$MyDatabase  {
   MyDatabase() : super(FlutterQueryExecutor.inDatabaseFolder(path: 'db.sqlite', logStatements: true));
 
+  @override
+  int get schemaVersion => 1;
 
 }

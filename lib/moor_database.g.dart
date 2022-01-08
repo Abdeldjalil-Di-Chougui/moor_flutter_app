@@ -7,20 +7,20 @@ part of 'moor_database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class TodoData extends DataClass implements Insertable<TodoData> {
+class Task extends DataClass implements Insertable<Task> {
   final int id;
   final String title;
   final String content;
   final int category;
-  TodoData(
+  Task(
       {@required this.id,
       @required this.title,
       @required this.content,
       this.category});
-  factory TodoData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Task.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    return TodoData(
+    return Task(
       id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
       title: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}title']),
@@ -48,8 +48,8 @@ class TodoData extends DataClass implements Insertable<TodoData> {
     return map;
   }
 
-  TodoCompanion toCompanion(bool nullToAbsent) {
-    return TodoCompanion(
+  TasksCompanion toCompanion(bool nullToAbsent) {
+    return TasksCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
@@ -62,10 +62,10 @@ class TodoData extends DataClass implements Insertable<TodoData> {
     );
   }
 
-  factory TodoData.fromJson(Map<String, dynamic> json,
+  factory Task.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return TodoData(
+    return Task(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       content: serializer.fromJson<String>(json['content']),
@@ -83,8 +83,7 @@ class TodoData extends DataClass implements Insertable<TodoData> {
     };
   }
 
-  TodoData copyWith({int id, String title, String content, int category}) =>
-      TodoData(
+  Task copyWith({int id, String title, String content, int category}) => Task(
         id: id ?? this.id,
         title: title ?? this.title,
         content: content ?? this.content,
@@ -92,7 +91,7 @@ class TodoData extends DataClass implements Insertable<TodoData> {
       );
   @override
   String toString() {
-    return (StringBuffer('TodoData(')
+    return (StringBuffer('Task(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
@@ -106,32 +105,32 @@ class TodoData extends DataClass implements Insertable<TodoData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TodoData &&
+      (other is Task &&
           other.id == this.id &&
           other.title == this.title &&
           other.content == this.content &&
           other.category == this.category);
 }
 
-class TodoCompanion extends UpdateCompanion<TodoData> {
+class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
   final Value<String> title;
   final Value<String> content;
   final Value<int> category;
-  const TodoCompanion({
+  const TasksCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
     this.category = const Value.absent(),
   });
-  TodoCompanion.insert({
+  TasksCompanion.insert({
     this.id = const Value.absent(),
     @required String title,
     @required String content,
     this.category = const Value.absent(),
   })  : title = Value(title),
         content = Value(content);
-  static Insertable<TodoData> custom({
+  static Insertable<Task> custom({
     Expression<int> id,
     Expression<String> title,
     Expression<String> content,
@@ -145,12 +144,12 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
     });
   }
 
-  TodoCompanion copyWith(
+  TasksCompanion copyWith(
       {Value<int> id,
       Value<String> title,
       Value<String> content,
       Value<int> category}) {
-    return TodoCompanion(
+    return TasksCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
@@ -178,7 +177,7 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
 
   @override
   String toString() {
-    return (StringBuffer('TodoCompanion(')
+    return (StringBuffer('TasksCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
@@ -188,11 +187,11 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
   }
 }
 
-class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
+class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $TodoTable(this.attachedDatabase, [this._alias]);
+  $TasksTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -225,11 +224,11 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
   @override
   List<GeneratedColumn> get $columns => [id, title, content, category];
   @override
-  String get aliasedName => _alias ?? 'todo';
+  String get aliasedName => _alias ?? 'tasks';
   @override
-  String get actualTableName => 'todo';
+  String get actualTableName => 'tasks';
   @override
-  VerificationContext validateIntegrity(Insertable<TodoData> instance,
+  VerificationContext validateIntegrity(Insertable<Task> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -258,23 +257,23 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TodoData map(Map<String, dynamic> data, {String tablePrefix}) {
-    return TodoData.fromData(data, attachedDatabase,
+  Task map(Map<String, dynamic> data, {String tablePrefix}) {
+    return Task.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $TodoTable createAlias(String alias) {
-    return $TodoTable(attachedDatabase, alias);
+  $TasksTable createAlias(String alias) {
+    return $TasksTable(attachedDatabase, alias);
   }
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $TodoTable _todo;
-  $TodoTable get todo => _todo ??= $TodoTable(this);
+  $TasksTable _tasks;
+  $TasksTable get tasks => _tasks ??= $TasksTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [todo];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [tasks];
 }

@@ -17,4 +17,9 @@ class MyDatabase extends _$MyDatabase  {
   int get schemaVersion => 2;
 
   Future<List<Task>> getAllTasks() => select(tasks).get();
+  Stream<List<Task>> watchAllTasks() => select(tasks).watch();
+
+  Future<int> insertTask(task) => into(tasks).insert(task);
+  Future updateTask(task) => update(tasks).replace(task);
+  Future deleteTask(task) => delete(tasks).delete(task);
 }

@@ -55,4 +55,25 @@ class _NewTagInputState extends State<NewTagInput> {
       ),
     );
   }
+
+  Widget _buildColorPickerButton(BuildContext context) {
+    return Flexible(
+      flex: 1,
+      child: GestureDetector(
+        child: Container(
+          width: 25,
+          height: 25,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: pickedTagColor,
+          ),
+        ),
+        onTap: () {
+          _showColorPickerDialog(context);
+        },
+      ),
+    );
+  }
+
+
 }

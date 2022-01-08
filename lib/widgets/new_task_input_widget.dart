@@ -112,4 +112,19 @@ class _NewTaskInputState extends State<NewTaskInput> {
     );
   }
 
+  IconButton _buildDateButton(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.calendar_today),
+      onPressed: () async {
+        newTaskDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2010),
+          lastDate: DateTime(2050),
+        );
+      },
+    );
+  }
+
+
 }

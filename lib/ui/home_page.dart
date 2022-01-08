@@ -45,4 +45,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildListItem(TaskWithTag item, TaskDao dao) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => dao.deleteTask(item.task),
+        )
+      ],
+      child: CheckboxListTile(
+        title: Text(item.task.name),
+        subtitle: Text(item.task.dueDate?.toString() ?? 'No date'),
+        secondary: _buildTag(item.tag),
+        value: item.task.completed,
+        onChanged: (newValue) {
+          dao.updateTask(item.task.copyWith(completed: newValue));
+        },
+      ),
+    );
+  }
 }

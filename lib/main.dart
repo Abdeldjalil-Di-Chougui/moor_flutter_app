@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moor_flutter_app/moor_database.dart';
+import 'package:moor_flutter_app/ui/home_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {

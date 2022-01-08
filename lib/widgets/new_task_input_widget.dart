@@ -39,5 +39,23 @@ class _NewTaskInputState extends State<NewTaskInput> {
     );
   }
 
-
+  Expanded _buildTextField(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(hintText: 'Task Name'),
+        onSubmitted: (inputName) {
+          final dao = Provider.of<TaskDao>(context);
+          final task = TasksCompanion(
+            name: Value(inputName),
+            dueDate: Value(newTaskDate),
+            tagName: Value(selectedTag?.name),
+          );
+          dao.insertTask(task);
+          resetValuesAfterSubmit();
+        },
+      ),
+    );
+  }
 }

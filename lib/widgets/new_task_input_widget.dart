@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moor_flutter/moor_flutter.dart';
+import 'package:moor_flutter_app/moor_database.dart';
 import 'package:provider/provider.dart';
-
-import '../../data/moor_database.dart';
 
 class NewTaskInput extends StatefulWidget {
   const NewTaskInput({

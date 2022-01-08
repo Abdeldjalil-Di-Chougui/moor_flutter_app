@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moor_flutter_app/moor_database.dart';
+import 'package:moor_flutter_app/widgets/new_tag_input_widget.dart';
+import 'package:moor_flutter_app/widgets/new_task_input_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'widget/new_tag_input_widget.dart';
-import 'widget/new_task_input_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override

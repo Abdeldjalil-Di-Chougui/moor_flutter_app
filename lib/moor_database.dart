@@ -20,8 +20,8 @@ class MyDatabase extends _$MyDatabase  {
 @UseDao(
   tables: [Tasks],
   queries: {
-    'watchCategoryOneTasks': 'SELECT * FROM Tasks WHERE category = 1 ORDER BY title ASC;'
-  }
+    'getCategoryOneTasks': 'SELECT * FROM Tasks WHERE category = 1 ORDER BY title ASC;'
+  },
 )
 class TaskDao extends DatabaseAccessor<MyDatabase> with _$TaskDaoMixin {
 
@@ -30,7 +30,7 @@ class TaskDao extends DatabaseAccessor<MyDatabase> with _$TaskDaoMixin {
 
   Future<List<Task>> getAllTasks() => select(tasks).get();
   Stream<List<Task>> watchAllTasks() => select(tasks).watch();
-  // Stream<List<Task>> watchCategoryOneTasks() => (select(tasks)
+  // Stream<List<Task>> getCategoryOneTasks() => (select(tasks)
   //     ..orderBy([
   //         (t) => OrderingTerm(expression: t.title, mode: OrderingMode.asc),
   //     ])

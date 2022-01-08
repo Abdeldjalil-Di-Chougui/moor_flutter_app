@@ -20,18 +20,31 @@ class Tags extends Table {
   Set<Column> get primaryKey => {name};
 }
 
-@UseMoor(tables: [Tasks], daos: [TaskDao])
+@UseMoor(tables: [Tasks, Tags], daos: [TaskDao])
 class MyDatabase extends _$MyDatabase  {
   MyDatabase() : super(FlutterQueryExecutor.inDatabaseFolder(path: 'db.sqlite', logStatements: true));
 
   @override
   int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (migrator, from, to) async {
+      if (from == 1) {
+        await migrator.addColumn(tasks, tasks.tagName);
+        await migrator.createTable(tags);
+      }
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
 }
 
 @UseDao(
-  tables: [Tasks],
+  tables: [Tasks, Tags],
   queries: {
-    'getCategoryOneTasks': 'SELECT * FROM Tasks WHERE category = 1 ORDER BY title ASC;'
+    'getCategoryOneTasks': 'SELECT * FROM Tasks WHERE completed = 1 ORDER BY due_date ASC;'
   },
 )
 class TaskDao extends DatabaseAccessor<MyDatabase> with _$TaskDaoMixin {
@@ -51,4 +64,14 @@ class TaskDao extends DatabaseAccessor<MyDatabase> with _$TaskDaoMixin {
   Future<int> insertTask(Insertable<Task> task) => into(tasks).insert(task);
   Future updateTask(Insertable<Task> task) => update(tasks).replace(task);
   Future deleteTask(Insertable<Task> task) => delete(tasks).delete(task);
+}
+
+@UseDao(tables: [Tags])
+class TagDao extends DatabaseAccessor<MyDatabase> with _$TagDaoMixin {
+  final MyDatabase db;
+
+  TagDao(this.db) : super(db);
+
+  Stream<List<Tag>> watchTags() => select(tags).watch();
+  Future insertTag(Insertable<Tag> tag) => into(tags).insert(tag);
 }

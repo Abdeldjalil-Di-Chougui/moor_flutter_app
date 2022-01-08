@@ -67,4 +67,29 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Column _buildTag(Tag tag) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (tag != null) ...[
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(tag.color),
+            ),
+          ),
+          Text(
+            tag.name,
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
 }

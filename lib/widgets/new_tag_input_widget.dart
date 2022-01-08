@@ -36,4 +36,23 @@ class _NewTagInputState extends State<NewTagInput> {
       ),
     );
   }
+
+  Flexible _buildTextField(BuildContext context) {
+    return Flexible(
+      flex: 1,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(hintText: 'Tag Name'),
+        onSubmitted: (inputName) {
+          final dao = Provider.of<TagDao>(context);
+          final tag = Tag(
+            name: inputName,
+            color: pickedTagColor.value,
+          );
+          dao.insertTag(tag);
+          resetValuesAfterSubmit();
+        },
+      ),
+    );
+  }
 }

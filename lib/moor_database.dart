@@ -3,10 +3,21 @@ import 'package:moor_flutter/moor_flutter.dart';
 part 'moor_database.g.dart';
 
 class Tasks extends Table {
+  // autoIncrement automatically sets this to be the primary key
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get title => text().withLength(min: 3, max: 25)();
-  TextColumn get content => text().named('body')();
-  IntColumn get category => integer().nullable()();
+  TextColumn get tagName =>
+      text().nullable().customConstraint('NULL REFERENCES tags(name)')();
+  TextColumn get name => text().withLength(min: 1, max: 50)();
+  DateTimeColumn get dueDate => dateTime().nullable()();
+  BoolColumn get completed => boolean().withDefault(Constant(false))();
+}
+
+class Tags extends Table {
+  TextColumn get name => text().withLength(min: 1, max: 10)();
+  IntColumn get color => integer()();
+
+  @override
+  Set<Column> get primaryKey => {name};
 }
 
 @UseMoor(tables: [Tasks], daos: [TaskDao])

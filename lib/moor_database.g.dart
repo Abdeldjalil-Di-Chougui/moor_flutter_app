@@ -502,6 +502,8 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   $TagsTable get tags => _tags ??= $TagsTable(this);
   TaskDao _taskDao;
   TaskDao get taskDao => _taskDao ??= TaskDao(this as MyDatabase);
+  TagDao _tagDao;
+  TagDao get tagDao => _tagDao ??= TagDao(this as MyDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

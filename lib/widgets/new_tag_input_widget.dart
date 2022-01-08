@@ -114,5 +114,10 @@ class _NewTagInputState extends State<NewTagInput> {
     );
   }
 
-
+  void resetValuesAfterSubmit() {
+    setState(() {
+      pickedTagColor = DEFAULT_COLOR;
+      controller.clear();
+    });
+  }
 }

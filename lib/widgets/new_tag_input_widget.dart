@@ -75,5 +75,44 @@ class _NewTagInputState extends State<NewTagInput> {
     );
   }
 
+  Widget _buildColorPickerButton(BuildContext context) {
+    return Flexible(
+      flex: 1,
+      child: GestureDetector(
+        child: Container(
+          width: 25,
+          height: 25,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: pickedTagColor,
+          ),
+        ),
+        onTap: () {
+          _showColorPickerDialog(context);
+        },
+      ),
+    );
+  }
+
+  Future _showColorPickerDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: MaterialColorPicker(
+            allowShades: false,
+            selectedColor: DEFAULT_COLOR,
+            onMainColorChange: (colorSwatch) {
+              setState(() {
+                pickedTagColor = colorSwatch;
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
+    );
+  }
+
 
 }

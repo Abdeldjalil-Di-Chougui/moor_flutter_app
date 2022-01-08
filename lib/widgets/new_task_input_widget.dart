@@ -126,5 +126,11 @@ class _NewTaskInputState extends State<NewTaskInput> {
     );
   }
 
-
+  void resetValuesAfterSubmit() {
+    setState(() {
+      newTaskDate = null;
+      selectedTag = null;
+      controller.clear();
+    });
+  }
 }

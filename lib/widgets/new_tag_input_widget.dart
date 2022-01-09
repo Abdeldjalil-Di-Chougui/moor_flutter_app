@@ -44,7 +44,7 @@ class _NewTagInputState extends State<NewTagInput> {
         controller: controller,
         decoration: InputDecoration(hintText: 'Tag Name'),
         onSubmitted: (inputName) {
-          final dao = Provider.of<TagDao>(context);
+          final dao = Provider.of<TagDao>(context, listen: false);
           final tag = Tag(
             name: inputName,
             color: pickedTagColor.value,

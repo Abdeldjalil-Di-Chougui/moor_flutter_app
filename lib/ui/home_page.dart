@@ -27,12 +27,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   StreamBuilder<List<TaskWithTag>> _buildTaskList(BuildContext context) {
-    final dao = Provider.of<TaskDao>(context);
+    final dao = Provider.of<TaskDao>(context, listen: false);
     return StreamBuilder(
       stream: dao.watchAllTasks(),
       builder: (context, AsyncSnapshot<List<TaskWithTag>> snapshot) {
         final tasks = snapshot.data ?? List();
-
         return ListView.builder(
           itemCount: tasks.length,
           itemBuilder: (_, index) {

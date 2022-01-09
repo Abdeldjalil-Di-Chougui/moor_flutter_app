@@ -45,7 +45,7 @@ class _NewTaskInputState extends State<NewTaskInput> {
         controller: controller,
         decoration: InputDecoration(hintText: 'Task Name'),
         onSubmitted: (inputName) {
-          final dao = Provider.of<TaskDao>(context);
+          final dao = Provider.of<TaskDao>(context, listen: false);
           final task = TasksCompanion(
             name: Value(inputName),
             dueDate: Value(newTaskDate),
@@ -60,7 +60,7 @@ class _NewTaskInputState extends State<NewTaskInput> {
 
   StreamBuilder<List<Tag>> _buildTagSelector(BuildContext context) {
     return StreamBuilder<List<Tag>>(
-      stream: Provider.of<TagDao>(context).watchTags(),
+      stream: Provider.of<TagDao>(context, listen: false).watchTags(),
       builder: (context, snapshot) {
         final tags = snapshot.data ?? List();
 
